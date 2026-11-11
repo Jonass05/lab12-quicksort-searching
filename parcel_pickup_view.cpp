@@ -54,7 +54,7 @@ int main()
     displayParcels(parcels, CAPACITY);
 
     // --- STEP D1: Activate after completing the search function ---
-    /*
+    
     int target;
     cout << "Enter a pickup code: ";
     if (!(cin >> target))
@@ -72,7 +72,7 @@ int main()
         cout << "Pickup code " << readyView[position]->pickupCode
              << " | Locker: " << readyView[position]->locker << endl;
     }
-    */
+    
     return 0;
 }
 
@@ -121,6 +121,31 @@ void quickSortReady(Parcel *view[], int first, int last)
 int binaryFindReady(Parcel *view[], int count, int target)
 {
     // TODO (Part D): Implement iterative binary search by pickupCode on the sorted view.
+    if (count <= 0)
+    {
+        return -1;
+    }
+    
+    int first = 0;
+    int last = count - 1;
+
+    while (first <= last)
+    {
+        int middle = first + (last - first) / 2;
+        if (view[middle]->pickupCode == target)
+        {
+            return middle;
+        }
+        if (view[middle]->pickupCode < target)
+        {
+            first = middle + 1;
+        }
+        else
+        {
+            last = middle - 1;
+        }
+    }
+
     return -1; // Temporary placeholder; replace with the complete search.
 }
 
@@ -169,12 +194,22 @@ void displayReady(Parcel *view[], int count)
  * D3 - Search positions and absence
  * Trace code 505 and the absent ready-view code 460. Give the checked ranges
  * and explain why a view index cannot be used as an index into parcels.
- * Answer:
+ * Answer: first = 0, last = 5, middle = 2, checked code = 505, next range = [3, 5]
+ * The code 460 is absent, first = 3, last = 5, middle = 4, checked code = 640, next range = [3, 3]
+ * A view index cannot be used as an index into parcels because the view is a separate array of pointers
+ * that may not correspond directly to the original array's indices. The view only contains pointers to the ready parcels, 
+ * and their order may differ from the original array, making direct indexing invalid.
  *
  * D4 - Time and auxiliary space
  * For n ready parcels and q queries, compare sorting once then using binary
  * search with scanning the unsorted ready view for every query. Give worst-case
  * bounds for this quicksort, balanced-partition bounds, and iterative-search
  * auxiliary space. Distinguish the view storage from recursive-call storage.
- * Answer:
+ * Answer: Order of quicksort is O(n log n) in the average case and O(n^2) in the worst case.
+ * Then binary search is O(log n) for each query. 
+ * The binary search uses O(1) auxiliary space since it is iterative.
+ * The storage for the view is O(n) since it holds pointers to the ready parcels,
+ * while the recursive call stack for quicksort can use O(log n) space in the average case
+ * and O(n) in the worst case.
+ * 
  */
